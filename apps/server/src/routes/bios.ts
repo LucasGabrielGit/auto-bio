@@ -4,6 +4,16 @@ import { authMiddleware } from "../middlewares/auth";
 
 export async function bioRoutes(fastify: FastifyInstance) {
     const bioController = new BioController();
+
+    fastify.get("/public/:slug", {
+        handler: bioController.get,
+    })
+
+    fastify.post("/generate", {
+        preHandler: authMiddleware,
+        handler: bioController.generateContent,
+    })
+
     fastify.post("/save", {
         preHandler: authMiddleware,
         handler: bioController.create,

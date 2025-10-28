@@ -56,7 +56,6 @@ function HomeComponent() {
 
   return (
     <div className="space-y-20 py-12">
-      {/* Hero Section */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -80,7 +79,7 @@ function HomeComponent() {
 
         <div className="flex gap-4 justify-center">
           <Button size="lg" className="text-lg px-8 py-6" asChild>
-            <Link to="/register">
+            <Link to="/registro">
               Começar Gratuitamente
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
@@ -93,7 +92,7 @@ function HomeComponent() {
         </div>
       </motion.section>
 
-      {/* Features Section */}
+
       <motion.section
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -135,7 +134,7 @@ function HomeComponent() {
         </div>
       </motion.section>
 
-      {/* How it Works */}
+
       <motion.section
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -186,7 +185,7 @@ function HomeComponent() {
         </div>
       </motion.section>
 
-      {/* Testimonials */}
+
       <motion.section
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -233,7 +232,7 @@ function HomeComponent() {
         </div>
       </motion.section>
 
-      {/* CTA Section */}
+
       <motion.section
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -250,7 +249,7 @@ function HomeComponent() {
 
         <div className="flex gap-4 justify-center">
           <Button size="lg" className="text-lg px-8 py-6" asChild>
-            <Link to="/register">
+            <Link to="/registro">
               Criar Minha Bio Agora
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>

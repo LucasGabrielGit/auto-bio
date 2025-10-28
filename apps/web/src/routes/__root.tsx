@@ -7,6 +7,7 @@ import {
 	createRootRouteWithContext
 } from "@tanstack/react-router";
 import "../index.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export interface RouterAppContext { }
 
@@ -32,17 +33,20 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootComponent() {
+	const queryClient = new QueryClient();
 	return (
 		<ThemeProvider attribute="class"
 			defaultTheme="dark"
 			disableTransitionOnChange
 			storageKey="vite-ui-theme">
 			<AuthProvider>
-				<HeadContent />
-				<Toaster richColors position="top-center" />
-				<main className="min-h-screen">
-					<Outlet />
-				</main>
+				<QueryClientProvider client={queryClient}>
+					<HeadContent />
+					<Toaster richColors position="top-center" />
+					<main className="min-h-screen">
+						<Outlet />
+					</main>
+				</QueryClientProvider>
 			</AuthProvider>
 		</ThemeProvider>
 	);

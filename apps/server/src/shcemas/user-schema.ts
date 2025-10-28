@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const createUserSchema = z.object({
     name: z.string(),
+    surname: z.string(),
     email: z.string()
         .min(1, "E-mail obrigatório")
         .refine((val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), "E-mail inválido"),
@@ -10,6 +11,7 @@ export const createUserSchema = z.object({
 
 export const updateUserSchema = z.object({
     name: z.string().optional(),
+    surname: z.string().optional(),
     email: z.string()
         .min(1, "E-mail obrigatório")
         .refine((val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), "E-mail inválido")

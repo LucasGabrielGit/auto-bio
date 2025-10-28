@@ -91,7 +91,6 @@ function ContatoComponent() {
 
     return (
         <div className="space-y-20 py-12">
-            {/* Hero Section */}
             <motion.section
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -111,7 +110,6 @@ function ContatoComponent() {
                 </div>
             </motion.section>
 
-            {/* Contact Form & Info */}
             <motion.section
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -119,7 +117,6 @@ function ContatoComponent() {
                 viewport={{ once: true }}
                 className="grid lg:grid-cols-2 gap-12"
             >
-                {/* Contact Form */}
                 <Card className="p-8">
                     <CardHeader>
                         <CardTitle className="text-2xl">Envie sua Mensagem</CardTitle>
@@ -159,7 +156,6 @@ function ContatoComponent() {
                     </CardContent>
                 </Card>
 
-                {/* Contact Info */}
                 <div className="space-y-6">
                     <div className="space-y-4">
                         <h3 className="text-2xl font-bold">Informações de Contato</h3>
@@ -194,7 +190,6 @@ function ContatoComponent() {
                 </div>
             </motion.section>
 
-            {/* Support Options */}
             <motion.section
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -241,7 +236,6 @@ function ContatoComponent() {
                 </div>
             </motion.section>
 
-            {/* FAQ Section */}
             <motion.section
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -280,7 +274,6 @@ function ContatoComponent() {
                 </div>
             </motion.section>
 
-            {/* Emergency Contact */}
             <motion.section
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}

@@ -68,7 +68,6 @@ function SobreComponent() {
 
     return (
         <div className="space-y-20 py-12">
-            {/* Hero Section */}
             <motion.section
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -88,7 +87,6 @@ function SobreComponent() {
                 </div>
             </motion.section>
 
-            {/* Mission & Vision */}
             <motion.section
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -123,7 +121,6 @@ function SobreComponent() {
                 </Card>
             </motion.section>
 
-            {/* Values */}
             <motion.section
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -165,7 +162,6 @@ function SobreComponent() {
                 </div>
             </motion.section>
 
-            {/* Stats */}
             <motion.section
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -193,7 +189,6 @@ function SobreComponent() {
                 </div>
             </motion.section>
 
-            {/* Team */}
             <motion.section
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -236,7 +231,6 @@ function SobreComponent() {
                 </div>
             </motion.section>
 
-            {/* Story */}
             <motion.section
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -293,7 +287,6 @@ function SobreComponent() {
                 </div>
             </motion.section>
 
-            {/* Awards */}
             <motion.section
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}

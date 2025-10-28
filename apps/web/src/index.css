@@ -133,3 +133,7 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+div[data-slot="dialog-content"] {
+  @apply max-w-4xl max-h-[80vh] w-[80vw] overflow-y-auto;
+}

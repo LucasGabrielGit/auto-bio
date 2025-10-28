@@ -10,6 +10,7 @@ import { userRoutes } from "./routes/auth";
 import { healthRoutes } from "./routes/health";
 import { errorHandler, notFoundHandler } from "./middlewares/error-handler";
 import { sanitizationMiddleware } from "./middlewares/validation";
+import { bioRoutes } from "./routes/bios";
 
 const app = fastify({
   logger: {
@@ -41,6 +42,8 @@ async function bootstrap() {
     await app.register(fastifyCors, {
       origin: env.CORS_ORIGIN === "*" ? true : env.CORS_ORIGIN.split(","),
       credentials: true,
+      allowedHeaders: ["Content-Type", "Authorization"],
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     });
 
     await app.register(fastifyRateLimit, {
@@ -68,6 +71,7 @@ async function bootstrap() {
 
     await app.register(healthRoutes);
     await app.register(userRoutes, { prefix: "/auth" });
+    await app.register(bioRoutes, { prefix: "/bios" });
 
     app.setNotFoundHandler(notFoundHandler);
     app.setErrorHandler(errorHandler);

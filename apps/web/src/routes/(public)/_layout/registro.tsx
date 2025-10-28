@@ -1,37 +1,37 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
-import { motion } from 'framer-motion'
-import { Link } from '@tanstack/react-router'
-import { useForm } from 'react-hook-form'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
+import { authApi, authUtils } from '@/lib/api/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { motion } from 'framer-motion'
 import {
-  User,
-  Mail,
-  Lock,
+  AlertCircle,
+  ArrowRight,
+  CheckCircle,
   Eye,
   EyeOff,
-  UserPlus,
-  Sparkles,
+  Lock,
+  Mail,
   Shield,
-  Zap,
-  CheckCircle,
-  ArrowRight,
-  AlertCircle
+  Sparkles,
+  User,
+  UserPlus,
+  Zap
 } from 'lucide-react'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
 
-// Zod Schema for form validation
 const registrationSchema = z.object({
-  firstName: z.string()
+  name: z.string()
     .min(2, 'Nome deve ter pelo menos 2 caracteres')
     .max(50, 'Nome deve ter no máximo 50 caracteres'),
-  lastName: z.string()
+  surname: z.string()
     .min(2, 'Sobrenome deve ter pelo menos 2 caracteres')
     .max(50, 'Sobrenome deve ter no máximo 50 caracteres'),
   email: z.string()
@@ -43,8 +43,7 @@ const registrationSchema = z.object({
   confirmPassword: z.string()
     .min(1, 'Confirmação de senha é obrigatória'),
   acceptTerms: z.boolean()
-    .refine(val => val === true, 'Você deve aceitar os termos de uso'),
-  acceptNewsletter: z.boolean().optional()
+    .refine(val => val === true, 'Você deve aceitar os termos de uso')
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Senhas não coincidem",
   path: ["confirmPassword"],
@@ -59,30 +58,38 @@ export const Route = createFileRoute('/(public)/_layout/registro')({
 function RegistroComponent() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const navigate = useNavigate()
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    watch,
     setValue,
-    getValues
   } = useForm<RegistrationForm>({
     resolver: zodResolver(registrationSchema),
     defaultValues: {
-      acceptNewsletter: true,
       acceptTerms: false
     }
   })
 
   const onSubmit = async (data: RegistrationForm) => {
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      console.log('Registration data:', data)
-      // Here you would typically send the data to your backend
-    } catch (error) {
+      const response = await authApi.register(data)
+
+      if (response.token) {
+        authUtils.setToken(response.token)
+      }
+
+      toast.success('Conta criada com sucesso!', {
+        description: 'Bem-vindo ao AutoBio! Você já pode começar a criar suas bios.'
+      })
+
+      navigate({ to: '/admin/dashboard' })
+    } catch (error: any) {
       console.error('Registration error:', error)
+      toast.error('Erro ao criar conta', {
+        description: error.response?.data?.message || 'Tente novamente mais tarde.'
+      })
     }
   }
 
@@ -117,7 +124,6 @@ function RegistroComponent() {
     <div className="min-h-screen py-12">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Side - Benefits */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -139,7 +145,6 @@ function RegistroComponent() {
               </p>
             </div>
 
-            {/* Benefits */}
             <div className="space-y-6">
               {benefits.map((benefit, index) => (
                 <motion.div
@@ -160,7 +165,6 @@ function RegistroComponent() {
               ))}
             </div>
 
-            {/* Features List */}
             <div className="bg-linear-to-r from-primary/5 to-purple-600/5 rounded-2xl p-6">
               <h3 className="font-semibold mb-4">O que você ganha gratuitamente:</h3>
               <div className="grid grid-cols-2 gap-2">
@@ -179,7 +183,6 @@ function RegistroComponent() {
             </div>
           </motion.div>
 
-          {/* Right Side - Registration Form */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -194,7 +197,6 @@ function RegistroComponent() {
               </CardHeader>
 
               <CardContent className="space-y-6">
-                {/* Social Login */}
                 <div className="space-y-3">
                   <Button variant="outline" className="w-full" size="lg">
                     <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24">
@@ -225,7 +227,6 @@ function RegistroComponent() {
                   </div>
                 </div>
 
-                {/* Registration Form */}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -233,15 +234,15 @@ function RegistroComponent() {
                       <div className="relative">
                         <User className="absolute left-3 top-5 h-4 w-4 text-muted-foreground" />
                         <Input
-                          {...register('firstName')}
+                          {...register('name')}
                           placeholder="Seu nome"
-                          className={`pl-10 ${errors.firstName ? 'border-red-500' : ''}`}
+                          className={`pl-10 ${errors.name ? 'border-red-500' : ''}`}
                         />
                       </div>
-                      {errors.firstName && (
+                      {errors.name && (
                         <div className="flex items-center space-x-1 text-red-500 text-xs">
                           <AlertCircle className="h-3 w-3" />
-                          <span>{errors.firstName.message}</span>
+                          <span>{errors.name.message}</span>
                         </div>
                       )}
                     </div>
@@ -250,15 +251,15 @@ function RegistroComponent() {
                       <div className="relative">
                         <User className="absolute left-3 top-5 h-4 w-4 text-muted-foreground" />
                         <Input
-                          {...register('lastName')}
+                          {...register('surname')}
                           placeholder="Seu sobrenome"
-                          className={`pl-10 ${errors.lastName ? 'border-red-500' : ''}`}
+                          className={`pl-10 ${errors.surname ? 'border-red-500' : ''}`}
                         />
                       </div>
-                      {errors.lastName && (
+                      {errors.surname && (
                         <div className="flex items-center space-x-1 text-red-500 text-xs">
                           <AlertCircle className="h-3 w-3" />
-                          <span>{errors.lastName.message}</span>
+                          <span>{errors.surname.message}</span>
                         </div>
                       )}
                     </div>
@@ -335,7 +336,6 @@ function RegistroComponent() {
                     )}
                   </div>
 
-                  {/* Terms and Newsletter */}
                   <div className="space-y-4">
                     <div className="flex items-start space-x-2">
                       <Checkbox
@@ -361,19 +361,6 @@ function RegistroComponent() {
                         <span>{errors.acceptTerms.message}</span>
                       </div>
                     )}
-
-                    <div className="flex items-start space-x-2">
-                      <Checkbox
-                        id="newsletter"
-                        {...register('acceptNewsletter')}
-                        onCheckedChange={(checked) => setValue('acceptNewsletter', checked as boolean)}
-                        defaultChecked={true}
-                        className="mt-1"
-                      />
-                      <label htmlFor="newsletter" className="text-sm text-muted-foreground leading-relaxed">
-                        Quero receber dicas, novidades e ofertas especiais por email
-                      </label>
-                    </div>
                   </div>
 
                   <Button
@@ -397,7 +384,6 @@ function RegistroComponent() {
                   </Button>
                 </form>
 
-                {/* Login Link */}
                 <div className="text-center">
                   <p className="text-sm text-muted-foreground">
                     Já tem uma conta?{' '}
@@ -407,7 +393,6 @@ function RegistroComponent() {
                   </p>
                 </div>
 
-                {/* Security Note */}
                 <div className="bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
                   <div className="flex items-start space-x-3">
                     <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />

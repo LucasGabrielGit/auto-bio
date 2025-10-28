@@ -1,4 +1,5 @@
-import { useHttpClient } from '@/lib/useHttpClient'
+
+import apiClient from '@/lib/api/client'
 import { useNavigate } from '@tanstack/react-router'
 import axios from 'axios'
 import React, { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
@@ -6,16 +7,16 @@ import { toast } from 'sonner'
 
 export interface User {
     id: string
-    username: string
+    email: string
     name: string
-    role: 'admin' | 'manager' | 'employee'
+    plan: string
 }
 
 export interface AuthContextType {
     user: User | null
     isLoading: boolean
     isAuthenticated: boolean
-    login: (username: string, password: string) => Promise<void>
+    login: (data: { email: string, password: string }) => Promise<void>
     logout: () => void
     refreshToken: () => Promise<void>
 }
@@ -28,74 +29,93 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null)
-    const { apiPrivate } = useHttpClient()
     const [isLoading, setIsLoading] = useState(true)
     const navigate = useNavigate()
 
-    // useEffect(() => {
-    //     const token = localStorage.getItem("auth_token")
-    //     if (!token) {
-    //         if (location.pathname !== "/auth/login") {
-    //             navigate({ to: "/" })
-    //         }
-    //         setIsLoading(false)
-    //         return
-    //     }
+    useEffect(() => {
+        const isPublicRoute = location.pathname.startsWith('/bio/') ||
+            location.pathname === '/' ||
+            location.pathname === '/login' ||
+            location.pathname.startsWith('/registro') ||
+            location.pathname.startsWith('/home') ||
+            location.pathname.startsWith('/sobre') ||
+            location.pathname.startsWith('/contato') ||
+            location.pathname.startsWith('/planos') ||
+            location.pathname.startsWith('/termos') ||
+            location.pathname.startsWith('/privacidade') ||
+            location.pathname.startsWith('/recuperar-senha')
 
-    //     const check = async () => {
-    //         try {
-    //             await verifyToken(token)
-    //         } catch (err) {
-    //             console.error("⚠️ Erro na verificação de token:", err)
-    //             localStorage.removeItem("auth_token")
-    //             if (location.pathname !== "/auth/login") {
-    //                 navigate({ to: "/login" })
-    //             }
-    //         } finally {
-    //             setIsLoading(false)
-    //         }
-    //     }
+        if (isPublicRoute) {
+            setIsLoading(false)
+            return
+        }
 
-    //     check()
-    // }, [])
+        const token = localStorage.getItem("auth_token")
+
+        if (!token) {
+            const isProtectedRoute = location.pathname.startsWith('/admin')
+            if (isProtectedRoute) {
+                navigate({ to: "/login" })
+            }
+            setIsLoading(false)
+            return
+        }
+
+        const check = async () => {
+            try {
+                await verifyToken(token)
+            } catch (err) {
+                localStorage.removeItem("auth_token")
+                const isProtectedRoute = location.pathname.startsWith('/admin')
+                if (isProtectedRoute) {
+                    navigate({ to: "/login" })
+                }
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        check()
+    }, [])
 
 
     const verifyToken = async (token: string) => {
         try {
-            const response = await apiPrivate.get("/auth/verify", {
+            const response = await apiClient.get("/auth/verify", {
                 headers: { Authorization: `Bearer ${token}` },
             })
 
-            if (!response.data?.valid) {
+            if (!response.data) {
                 throw new Error("Token inválido")
             }
             setUser(response.data.user)
-            if (location.pathname === "/auth/login") {
-                navigate({ to: "/admin/dashboard" })
-            }
         } catch (error) {
             if (axios.isAxiosError(error) && error.response?.status === 401) {
                 localStorage.removeItem("auth_token")
                 setUser(null)
-                navigate({ to: "/" })
+                const isProtectedRoute = location.pathname.startsWith('/admin')
+                if (isProtectedRoute) {
+                    toast.error("Você precisa estar logado para acessar esta página!")
+                    navigate({ to: "/login" })
+                }
             }
             throw error
         }
     }
 
 
-    const login = async (username: string, password: string) => {
+    const login = async (data: { email: string, password: string }) => {
         try {
             setIsLoading(true)
-            const response = await apiPrivate.post('/auth/login', { username, password })
+            const response = await apiClient.post('/auth/login', data)
             if (response.data.token) {
                 localStorage.setItem('auth_token', response.data.token)
                 console.log(response.data)
                 setUser({
                     id: response.data.user.id,
-                    username: response.data.user.username,
+                    email: response.data.user.email,
                     name: response.data.user.name,
-                    role: response.data.user.role,
+                    plan: response.data.user.plan,
                 })
                 toast.success('Login realizado com sucesso!')
 
@@ -130,7 +150,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 throw new Error('Nenhum token encontrado')
             }
 
-            const response = await apiPrivate.post('/auth/refresh', {}, {
+            const response = await apiClient.post('/auth/refresh', {}, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },

@@ -23,7 +23,6 @@ export const errorHandler = (
   request: FastifyRequest,
   reply: FastifyReply
 ) => {
-  // Log do erro para monitoramento
   request.log.error({
     error: {
       message: error.message,
@@ -38,7 +37,6 @@ export const errorHandler = (
     },
   }, "Request error");
 
-  // Tratamento específico para erros de validação Zod
   if (error instanceof ZodError) {
     return reply.status(400).send({
       error: "Validation Error",
@@ -52,7 +50,6 @@ export const errorHandler = (
     });
   }
 
-  // Tratamento para erros customizados
   if (error instanceof CustomError) {
     return reply.status(error.statusCode).send({
       error: error.name,
@@ -62,7 +59,6 @@ export const errorHandler = (
     });
   }
 
-  // Tratamento para erros do Fastify
   if ("statusCode" in error && error.statusCode) {
     return reply.status(error.statusCode).send({
       error: error.name || "Request Error",
@@ -71,7 +67,6 @@ export const errorHandler = (
     });
   }
 
-  // Tratamento para erros de JWT
   if (error.message?.includes("jwt") || error.message?.includes("token")) {
     return reply.status(401).send({
       error: "Authentication Error",
@@ -80,7 +75,6 @@ export const errorHandler = (
     });
   }
 
-  // Tratamento para erros de banco de dados
   if (error.message?.includes("Prisma") || error.message?.includes("database")) {
     return reply.status(500).send({
       error: "Database Error",
@@ -89,7 +83,6 @@ export const errorHandler = (
     });
   }
 
-  // Erro genérico do servidor
   return reply.status(500).send({
     error: "Internal Server Error",
     message: "Erro interno do servidor",
@@ -97,7 +90,6 @@ export const errorHandler = (
   });
 };
 
-// Middleware para capturar erros não tratados
 export const notFoundHandler = (request: FastifyRequest, reply: FastifyReply) => {
   return reply.status(404).send({
     error: "Not Found",

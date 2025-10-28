@@ -9,76 +9,76 @@ export const Route = createFileRoute('/(public)/_layout/planos')({
   component: PlanosComponent,
 })
 
+export const plans = [
+  {
+    name: "Free",
+    price: "R$0",
+    period: "para sempre",
+    description: "Perfeito para começar",
+    features: [
+      "1 bio personalizada",
+      "3 links personalizados",
+      "Layout básico",
+      "Página pública autobio.app/seu-nome",
+      "Suporte por email"
+    ],
+    limitations: [
+      "Sem IA avançada",
+      "Sem domínio próprio",
+      "Sem relatórios"
+    ],
+    buttonText: "Começar Grátis",
+    buttonVariant: "outline" as const,
+    popular: false,
+    icon: <Sparkles className="h-6 w-6" />
+  },
+  {
+    name: "Pro",
+    price: "R$14,90",
+    period: "/mês",
+    description: "Para profissionais sérios",
+    features: [
+      "IA ilimitada para bios",
+      "Layouts extras e exclusivos",
+      "Links ilimitados",
+      "Personalização avançada de cores",
+      "Análise de performance da bio",
+      "Suporte prioritário",
+      "Exportar bio em PDF"
+    ],
+    limitations: [
+      "Sem domínio próprio",
+      "Sem IA de tradução"
+    ],
+    buttonText: "Escolher Pro",
+    buttonVariant: "default" as const,
+    popular: true,
+    icon: <Zap className="h-6 w-6" />
+  },
+  {
+    name: "Premium",
+    price: "R$29,90",
+    period: "/mês",
+    description: "Para quem quer o máximo",
+    features: [
+      "Tudo do plano Pro",
+      "Domínio próprio (meubio.com)",
+      "IA avançada com reescrita",
+      "Tradução automática da bio",
+      "Relatórios detalhados de visitantes",
+      "Templates exclusivos premium",
+      "Integração com Google Analytics",
+      "Suporte VIP 24/7",
+      "Backup automático"
+    ],
+    limitations: [],
+    buttonText: "Escolher Premium",
+    buttonVariant: "default" as const,
+    popular: false,
+    icon: <Crown className="h-6 w-6" />
+  }
+]
 function PlanosComponent() {
-  const plans = [
-    {
-      name: "Free",
-      price: "R$0",
-      period: "para sempre",
-      description: "Perfeito para começar",
-      features: [
-        "1 bio personalizada",
-        "3 links personalizados",
-        "Layout básico",
-        "Página pública autobio.app/seu-nome",
-        "Suporte por email"
-      ],
-      limitations: [
-        "Sem IA avançada",
-        "Sem domínio próprio",
-        "Sem relatórios"
-      ],
-      buttonText: "Começar Grátis",
-      buttonVariant: "outline" as const,
-      popular: false,
-      icon: <Sparkles className="h-6 w-6" />
-    },
-    {
-      name: "Pro",
-      price: "R$14,90",
-      period: "/mês",
-      description: "Para profissionais sérios",
-      features: [
-        "IA ilimitada para bios",
-        "Layouts extras e exclusivos",
-        "Links ilimitados",
-        "Personalização avançada de cores",
-        "Análise de performance da bio",
-        "Suporte prioritário",
-        "Exportar bio em PDF"
-      ],
-      limitations: [
-        "Sem domínio próprio",
-        "Sem IA de tradução"
-      ],
-      buttonText: "Escolher Pro",
-      buttonVariant: "default" as const,
-      popular: true,
-      icon: <Zap className="h-6 w-6" />
-    },
-    {
-      name: "Premium",
-      price: "R$29,90",
-      period: "/mês",
-      description: "Para quem quer o máximo",
-      features: [
-        "Tudo do plano Pro",
-        "Domínio próprio (meubio.com)",
-        "IA avançada com reescrita",
-        "Tradução automática da bio",
-        "Relatórios detalhados de visitantes",
-        "Templates exclusivos premium",
-        "Integração com Google Analytics",
-        "Suporte VIP 24/7",
-        "Backup automático"
-      ],
-      limitations: [],
-      buttonText: "Escolher Premium",
-      buttonVariant: "default" as const,
-      popular: false,
-      icon: <Crown className="h-6 w-6" />
-    }
-  ]
 
   const faqs = [
     {
@@ -105,7 +105,6 @@ function PlanosComponent() {
 
   return (
     <div className="space-y-20 py-12">
-      {/* Header */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -129,7 +128,6 @@ function PlanosComponent() {
         </div>
       </motion.section>
 
-      {/* Pricing Cards */}
       <motion.section
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -215,7 +213,6 @@ function PlanosComponent() {
         ))}
       </motion.section>
 
-      {/* Comparison Table */}
       <motion.section
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -262,7 +259,6 @@ function PlanosComponent() {
         </div>
       </motion.section>
 
-      {/* FAQ */}
       <motion.section
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -299,7 +295,6 @@ function PlanosComponent() {
         </div>
       </motion.section>
 
-      {/* CTA */}
       <motion.section
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}

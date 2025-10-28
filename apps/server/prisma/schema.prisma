@@ -17,6 +17,7 @@ datasource db {
 model User {
   id        String   @id @default(cuid())
   name      String
+  surname   String   @default("")
   email     String   @unique
   password  String
   plan      String   @default("free")
@@ -29,9 +30,13 @@ model Bio {
   userId    String
   title     String
   content   String
-  style     String //creative, informational, educational, professional
-  links     Json
+  style     String   @default("neutro")
+  template  String   @default("minimalista")
+  links     Json     @default("[]")
   publicUrl String   @unique
+  isPublic  Boolean  @default(false)
+  views     Int      @default(0)
   createdAt DateTime @default(now())
-  User      User     @relation(fields: [userId], references: [id])
+  updatedAt DateTime @default(now()) @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
 }

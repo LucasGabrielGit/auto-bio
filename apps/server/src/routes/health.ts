@@ -2,7 +2,6 @@ import type { FastifyInstance } from "fastify";
 import { db } from "../lib/prisma/client/db";
 
 export async function healthRoutes(fastify: FastifyInstance) {
-  // Health check básico
   fastify.get("/health", async (_request, reply) => {
     return reply.status(200).send({
       status: "ok",
@@ -12,18 +11,15 @@ export async function healthRoutes(fastify: FastifyInstance) {
     });
   });
 
-  // Health check detalhado
   fastify.get("/health/detailed", async (request, reply) => {
     const startTime = Date.now();
-    
+
     try {
-      // Teste de conexão com o banco de dados
       await db.$queryRaw`SELECT 1`;
       const dbLatency = Date.now() - startTime;
 
-      // Informações do sistema
       const memoryUsage = process.memoryUsage();
-      
+
       return reply.status(200).send({
         status: "ok",
         timestamp: new Date().toISOString(),
@@ -49,7 +45,7 @@ export async function healthRoutes(fastify: FastifyInstance) {
       });
     } catch (error) {
       request.log.error(error, "Health check failed");
-      
+
       return reply.status(503).send({
         status: "error",
         timestamp: new Date().toISOString(),
@@ -65,10 +61,9 @@ export async function healthRoutes(fastify: FastifyInstance) {
     }
   });
 
-  // Endpoint para métricas básicas
   fastify.get("/metrics", async (_request, reply) => {
     const memoryUsage = process.memoryUsage();
-    
+
     return reply.status(200).send({
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),

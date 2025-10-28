@@ -22,7 +22,6 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 
-// Zod Schema for password recovery form
 const recoverySchema = z.object({
     email: z.string()
         .email('Email inválido')
@@ -49,11 +48,8 @@ function RecuperarSenhaComponent() {
 
     const onSubmit = async (data: RecoveryForm) => {
         try {
-            // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 2000))
-            console.log('Recovery email sent to:', data.email)
             setIsSubmitted(true)
-            // Here you would typically send the recovery email
         } catch (error) {
             console.error('Recovery error:', error)
         }
@@ -144,7 +140,6 @@ function RecuperarSenhaComponent() {
         <div className="min-h-screen py-12">
             <div className="container mx-auto px-4">
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
-                    {/* Left Side - Information */}
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -165,7 +160,6 @@ function RecuperarSenhaComponent() {
                             </p>
                         </div>
 
-                        {/* Steps */}
                         <div className="space-y-6">
                             <h3 className="font-semibold text-lg">Como funciona:</h3>
                             {steps.map((step, index) => (
@@ -187,7 +181,6 @@ function RecuperarSenhaComponent() {
                             ))}
                         </div>
 
-                        {/* Security Note */}
                         <div className="bg-linear-to-r from-primary/5 to-purple-600/5 rounded-2xl p-6">
                             <div className="flex items-start space-x-3">
                                 <Shield className="h-6 w-6 text-primary shrink-0 mt-1" />
@@ -204,7 +197,6 @@ function RecuperarSenhaComponent() {
                         </div>
                     </motion.div>
 
-                    {/* Right Side - Recovery Form */}
                     <motion.div
                         initial={{ opacity: 0, x: 50 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -273,7 +265,6 @@ function RecuperarSenhaComponent() {
                                     </div>
                                 </div>
 
-                                {/* Alternative Actions */}
                                 <div className="space-y-3">
                                     <Button variant="outline" className="w-full" asChild>
                                         <Link to="/login">
@@ -289,7 +280,6 @@ function RecuperarSenhaComponent() {
                                     </Button>
                                 </div>
 
-                                {/* Help Section */}
                                 <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
                                     <div className="flex items-start space-x-3">
                                         <Sparkles className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />

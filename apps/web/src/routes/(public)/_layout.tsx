@@ -16,7 +16,7 @@ function PublicLayoutComponent() {
     >
       <div className="min-h-screen">
         <Header />
-        <main className="px-32">
+        <main className="px-32 sm:px-6 lg:px-23">
           <Outlet />
         </main>
       </div>

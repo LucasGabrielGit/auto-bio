@@ -30,15 +30,31 @@ export class UserController {
                 id: true,
                 name: true,
                 email: true,
+                plan: true,
                 createdAt: true,
             }
+        });
+
+        const token = await res.jwtSign({
+            id: user.id,
+            email: user.email,
+            plan: user.plan,
+            name: user.name,
+        }, {
+            expiresIn: "1h",
         });
 
         req.log.info({ userId: user.id }, "Usuário criado com sucesso");
 
         return res.status(201).send({
             message: "Usuário criado com sucesso",
-            user,
+            token,
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                plan: user.plan,
+            },
         });
     }
 
@@ -67,6 +83,8 @@ export class UserController {
             email: user.email,
             plan: user.plan,
             name: user.name,
+        }, {
+            expiresIn: "1h",
         });
 
         req.log.info({ userId: user.id }, "Login realizado com sucesso");

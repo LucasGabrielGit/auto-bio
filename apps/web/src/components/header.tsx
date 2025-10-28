@@ -26,9 +26,8 @@ export default function Header() {
 			transition={{ duration: 0.6 }}
 			className="sticky top-0 z-50 backdrop-blur-md bg-accent border-b border-border/40 shadow-sm"
 		>
-			<div className="container mx-auto px-4 sm:px-6 lg:px-4">
+			<div className="mx-auto px-32 sm:px-6 lg:px-23">
 				<div className="flex justify-between items-center h-16">
-					{/* Logo */}
 					<Link to="/home" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
 						<div className="relative">
 							<img src={logo} alt="AutoBio" className="w-8 h-8" />
@@ -39,7 +38,6 @@ export default function Header() {
 						</span>
 					</Link>
 
-					{/* Navigation */}
 					<nav className="hidden md:flex items-center space-x-8 place-content-center pl-24">
 						{links.map((link) => {
 							const isActive = isActiveLink(link.to);
@@ -64,7 +62,6 @@ export default function Header() {
 						})}
 					</nav>
 
-					{/* Actions */}
 					<div className="flex items-center space-x-3 ">
 						<Button
 							variant="outline"
